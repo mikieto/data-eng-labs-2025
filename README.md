@@ -36,12 +36,20 @@ All labs in this repository assume this runtime.
 
 ---
 
-## Advanced: Local Dev Container (Optional)
+## Advanced: Local Dev Container (Optional / Best-effort)
 
-If you prefer to run the devcontainer **locally**:
+Some readers may prefer to run the same devcontainer **locally** with
+VS Code and Docker. This path is **optional** and provided on a
+best-effort basis.
 
-1. Install Docker and Visual Studio Code on your machine.
+The book and all per-chapter READMEs assume **GitHub Codespaces** as
+the standard runtime. Local devcontainer behavior can vary by OS and
+tool versions. If you run into issues locally, please fall back to
+GitHub Codespaces.
 
+### Suggested Steps (for advanced users)
+
+1. Install Docker and Visual Studio Code.
 2. Clone this repository:
 
 ```bash
@@ -49,17 +57,18 @@ git clone https://github.com/mikieto/data-eng-labs-2025.git
 cd data-eng-labs-2025
 ```
 
-3. Open the folder in VS Code and use
+3. Open the folder in VS Code and use  
    **“Dev Containers: Reopen in Container”**.
 
-4. Then run:
+4. Inside the container, try:
 
 ```bash
 python labs/ch02/run.py
 ```
 
-The book and the per-chapter READMEs, however, treat **GitHub Codespaces**
-as the default runtime.
+If this works, your local environment matches the Codespaces runtime
+closely enough for these labs. If it does not work, you can safely
+return to GitHub Codespaces — all labs are designed to run there.
 
 ---
 
