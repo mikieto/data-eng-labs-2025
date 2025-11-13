@@ -1,0 +1,17 @@
+{
+  "name": "data-eng-labs-2025",
+  // Official Dev Container image with Python 3.11
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+
+  // After the container is created, just verify Python is available.
+  "postCreateCommand": "python --version && pip --version",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  }
+}
