@@ -1,0 +1,24 @@
+{
+  "chapter": "CH02",
+  "description": "Tiny boundary for the CH02 lab.",
+  "allowed_path_prefixes": [
+    "labs/ch02/"
+  ],
+  "limits": {
+    "max_files_changed": 2,
+    "max_hunks_per_file": 3,
+    "max_lines_added": 80
+  },
+  "rb30": {
+    "required": true,
+    "allowed_anchor_types": [
+      "tag",
+      "swap",
+      "tt"
+    ],
+    "default_anchor": {
+      "type": "tag",
+      "ref": "pre-ch02-labs"
+    }
+  }
+}

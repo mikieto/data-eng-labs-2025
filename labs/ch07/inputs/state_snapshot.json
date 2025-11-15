@@ -1,0 +1,25 @@
+{
+  "chapter": "CH07",
+  "world": "labs",
+  "current_model": {
+    "id": "ch07_model_v1",
+    "auc": 0.91
+  },
+  "candidate_model": {
+    "id": "ch07_model_v2",
+    "auc": 0.94
+  },
+  "thresholds": {
+    "min_candidate_auc": 0.9,
+    "min_improvement": 0.0
+  },
+  "boundary": {
+    "allowed_targets": [
+      "staging",
+      "production"
+    ],
+    "allowed_paths": [
+      "labs/ch07/models/**"
+    ]
+  }
+}

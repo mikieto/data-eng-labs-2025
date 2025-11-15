@@ -1,0 +1,20 @@
+{
+  "chapter": "CH02",
+  "change_id": "ch02-example-001",
+  "summary": {
+    "files_count": 1,
+    "total_lines_added": 12,
+    "within_limits": true
+  },
+  "checks": {
+    "boundary_ok": true,
+    "unit_ok": true,
+    "rb30_ok": true
+  },
+  "status": "accept",
+  "messages": [
+    "All file paths stay within allowed prefixes.",
+    "Change stays within the configured Change Unit limits.",
+    "RB-30 anchor is present and allowed."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "kind": "ai_generated_change_pack",
+  "chapter": "CH07",
+  "mode": "labs",
+  "rb30_anchor": {
+    "type": "tag",
+    "ref": "pre-ch07-lab-001"
+  },
+  "summary": {
+    "reason": "Promote candidate model ch07_model_v2 to production.",
+    "confidence": 0.82
+  },
+  "changes": [
+    {
+      "type": "model_promotion",
+      "target": "production",
+      "from_model_id": "ch07_model_v1",
+      "to_model_id": "ch07_model_v2",
+      "expected_auc": 0.94
+    }
+  ]
+}

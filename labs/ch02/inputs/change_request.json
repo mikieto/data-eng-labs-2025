@@ -1,0 +1,20 @@
+{
+  "change_id": "ch02-example-001",
+  "chapter": "CH02",
+  "mode": "labs",
+  "files": [
+    {
+      "path": "labs/ch02/demo.txt",
+      "hunks": [
+        {
+          "lines_added": 12,
+          "lines_removed": 0
+        }
+      ]
+    }
+  ],
+  "rb30_anchor": {
+    "type": "tag",
+    "ref": "pre-ch02-example-001"
+  }
+}

@@ -1,0 +1,9 @@
+name: ch05_mini_highway
+description: "Tiny Single Change Highway for CH05 lab."
+stages:
+  - validate
+  - dry_run
+  - gate
+  - apply
+  - export
+  - rb30_verify

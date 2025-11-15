@@ -1,0 +1,25 @@
+{
+  "chapter": "CH07",
+  "summary": {
+    "change_count": 1,
+    "boundary_targets": [
+      "production"
+    ]
+  },
+  "checks": {
+    "schema_ok": true,
+    "chapter_ok": true,
+    "rb30_ok": true,
+    "boundary_ok": true,
+    "metrics_ok": true
+  },
+  "status": "accept",
+  "messages": [
+    "Basic change pack schema looks valid.",
+    "Change pack targets chapter CH07 and matches the lab snapshot.",
+    "RB-30 anchor is present and well-formed.",
+    "All change targets are within the allowed_targets defined in the snapshot.",
+    "Candidate AUC 0.940 is above the minimum threshold 0.900.",
+    "Candidate AUC 0.940 is not worse than current AUC 0.910 by more than the allowed delta (0.000)."
+  ]
+}

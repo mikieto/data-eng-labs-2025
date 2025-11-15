@@ -1,163 +1,110 @@
-
-# CH02 Lab — Boundary, Change Unit, Evidence, RB-30
-
-This lab belongs to **CH02** of the book.
-
----
+# CH02 Lab — Boundary, Change Unit, and RB-30 (Tiny World)
 
 ## Learning Objectives
 
-By the end of this lab, you should be able to:
+By the end of this lab, you will be able to:
 
-1. Explain, in simple words, what **Boundary**, **Change Unit**, **Evidence**, and **RB-30** mean.
-2. Make one tiny, intentional **Change Unit** under `labs/ch02/`.
-3. Write down, in your own notes, how you would roll back that Change Unit within a few minutes.
+- Describe a tiny boundary for a change (allowed paths + limits).
+- Check whether a change request stays inside that boundary.
+- Confirm that an RB-30 anchor is present for safe rollback.
 
-In this first lab, your **Boundary** is also simple:  
-you only touch files under `labs/ch02/`.
+This lab runs entirely inside `labs/ch02/` and does **not** modify any other
+part of the repository.
 
 ---
 
-## Before You Start
+## Prerequisites
 
-Make sure your environment is set up according to the **Standard Runtime
-(GitHub Codespaces)** described in the root `README.md` of this repository.
-
-Once you can run:
+- The root README explains how to open this repo in **VS Code + devcontainer**
+  or **GitHub Codespaces**. Please complete that setup first.
+- Make sure you can run:
 
 ```bash
-python labs/ch02/run.py
+python --version
 ```
 
-inside that environment and see the output for CH02, you are ready for this lab.
+  inside the devcontainer or Codespaces terminal.
 
 ---
 
 ## Files in This Lab
 
-Typical files under `labs/ch02/`:
-
-* `README.md` — this guide
-* `run.py` — a small script that prints a simple lab manifest
+- `labs/ch02/run.py` — the lab runner (entry point).
+- `labs/ch02/inputs/boundary_config.json` — fixed boundary and limits.
+- `labs/ch02/inputs/change_request.json` — a small change request you can edit.
+- `labs/ch02/artifacts/ch02_result.json` — result JSON created by the runner.
 
 ---
 
-## What You Will Do (Day-0 skeleton)
+## Step 1 — Run the lab once
 
-### Step 1 — Run the script and check the initial output
-
-Run:
+From the repository root:
 
 ```bash
 python labs/ch02/run.py
 ```
 
-You should see output similar to this:
+You should see that:
 
-```json
-{
-  "chapter": "CH02",
-  "lab": "boundary_change_unit_evidence_rb30",
-  "change_unit_example": "original"
-}
-```
+- `labs/ch02/artifacts/ch02_result.json` is created or updated.
+- The `status` field is `"accept"` for the default change request.
 
-If you see this JSON (or the same keys/values), your environment for this lab
-is working.
+Open the result file and read:
+
+- `summary.files_count` and `summary.total_lines_added`
+- `checks.boundary_ok`, `checks.unit_ok`, and `checks.rb30_ok`
+- `messages[]`
 
 ---
 
-### Step 2 — Make one tiny, intentional Change Unit
+## Step 2 — Edit one thing and run again
 
-Open `labs/ch02/run.py` in your editor and find this line inside the `manifest`
-dictionary:
+Now open:
 
-```python
-        "change_unit_example": "original",
+```text
+labs/ch02/inputs/change_request.json
 ```
 
-Change only this line to:
+Try one of these small experiments:
 
-```python
-        "change_unit_example": "after_first_change",
+1. **Break the boundary**
+
+- Change the file path to a different chapter, for example:
+
+```json
+"path": "labs/ch03/demo.txt"
 ```
 
-This is your **Change Unit** for this lab: exactly one small, intentional edit.
-
-Now run the script again:
+- Save the file, then run:
 
 ```bash
 python labs/ch02/run.py
 ```
 
-You should now see:
+- Observe how `checks.boundary_ok` and `status` change.
 
-```json
-{
-  "chapter": "CH02",
-  "lab": "boundary_change_unit_evidence_rb30",
-  "change_unit_example": "after_first_change"
-}
-```
+2. **Break the Change Unit limits**
 
-If the value changed from `"original"` to `"after_first_change"` and nothing
-else broke, your Change Unit is complete.
+- Set `lines_added` to a large number, for example `200`.
+- Run the lab again and see how `checks.unit_ok` and `status` change.
 
----
+3. **Break RB-30**
 
-### Step 3 — Think about rollback (RB-30 in miniature)
+- Remove the `rb30_anchor` field or change its `"type"` to an unsupported value.
+- Run the lab again and confirm that `checks.rb30_ok` is now `false`.
 
-In your own notes, describe how you would roll back this Change Unit within a
-few minutes. For example:
-
-* Use your editor’s undo, or
-* Use a Git command such as:
-
-```bash
-git restore labs/ch02/run.py
-```
-
-The important part is:
-
-* You know **exactly what you changed** (one line), and
-* You know **exactly how to undo it quickly**.
-
-That is the smallest possible form of RB-30.
-
-Your short note here is also your first piece of **Evidence**:
-it records what you changed and how you would recover.
+Each time, compare the new `ch02_result.json` with the previous result.
 
 ---
 
-### Why such a tiny Change Unit is enough (for now)
+## Step 3 — From this lab to real systems
 
-You might feel that this exercise is “too small” or “too obvious”.
-That is intentional.
+In real data platforms:
 
-The goal of this first lab is **not** to build anything complex.
-The goal is to get used to a simple pattern:
+- The **boundary** is often defined in configuration (allowed schemas, paths, or roles).
+- The **Change Unit** is a small, reviewable set of changes (files / lines / operations).
+- **RB-30** is implemented through tags, clones, or time travel, so that any
+  failed change can be rolled back quickly.
 
-* **1 Change Unit**: you change exactly one small thing on purpose.
-* **Always reversible**: you know exactly how to undo it quickly.
-
-Later chapters and labs will:
-
-* Introduce more realistic code changes and data-platform examples.
-* Show stronger rollback patterns (for example, using Git tags and RB-30 drills).
-* Connect these ideas to `state_snapshot.json` and `ai_generated_change_pack`.
-
-For now, it is completely fine if your Change Unit is only “one extra line”
-and your rollback is simply “undo the line or run `git restore`”.
-
----
-
-## Completion Criteria
-
-You have completed this lab when you can:
-
-* Run `python labs/ch02/run.py` in the standard runtime.
-* Perform one tiny, intentional Change Unit under `labs/ch02/`
-  (the value of `change_unit_example` changes as expected).
-* Explain, in your own words, how you would roll it back quickly and how it
-  relates to Boundary / Change Unit / Evidence / RB-30.
-
+This tiny CH02 lab is a miniature of that world: you practice the same ideas
+with a very small, deterministic JSON-based exercise.

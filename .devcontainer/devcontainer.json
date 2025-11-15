@@ -3,8 +3,10 @@
   // Official Dev Container image with Python 3.11
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
 
-  // After the container is created, just verify Python is available.
-  "postCreateCommand": "python --version && pip --version",
+  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces,type=bind",
+  "workspaceFolder": "/workspaces/data-eng-labs-2025",
+
+  "postCreateCommand": "pip install -r requirements.txt",
 
   "customizations": {
     "vscode": {

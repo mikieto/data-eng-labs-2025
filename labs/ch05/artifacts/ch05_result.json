@@ -1,0 +1,22 @@
+{
+  "chapter": "CH05",
+  "pipeline_name": "ch05_mini_highway",
+  "summary": {
+    "stage_count": 6,
+    "unknown_stages": [],
+    "missing_stages": [],
+    "extra_stages": []
+  },
+  "checks": {
+    "order_ok": true,
+    "required_stages_ok": true,
+    "rb30_ok": true
+  },
+  "status": "accept",
+  "messages": [
+    "Pipeline stages follow the canonical validate→dry_run→gate→apply→export→rb30_verify order.",
+    "All required stages are present.",
+    "There are no unknown stages in the pipeline.",
+    "RB-30 verification stage (rb30_verify) is present at the end of the pipeline."
+  ]
+}
