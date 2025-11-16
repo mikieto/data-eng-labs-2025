@@ -1,25 +1,100 @@
 {
-  "chapter": "CH07",
-  "world": "labs",
-  "current_model": {
-    "id": "ch07_model_v1",
-    "auc": 0.91
+  "chapters": {
+    "CH02": {
+      "result": {
+        "chapter": "CH02",
+        "change_id": "ch02-example-001",
+        "summary": {
+          "files_count": 1,
+          "total_lines_added": 12,
+          "within_limits": true
+        },
+        "checks": {
+          "boundary_ok": true,
+          "unit_ok": true,
+          "rb30_ok": true
+        },
+        "status": "accept",
+        "messages": [
+          "All file paths stay within allowed prefixes.",
+          "Change stays within the configured Change Unit limits.",
+          "RB-30 anchor is present and allowed."
+        ]
+      }
+    },
+    "CH05": {
+      "result": {
+        "chapter": "CH05",
+        "pipeline_name": "ch05_mini_highway",
+        "summary": {
+          "stage_count": 6,
+          "unknown_stages": [],
+          "missing_stages": [],
+          "extra_stages": []
+        },
+        "checks": {
+          "order_ok": true,
+          "required_stages_ok": true,
+          "rb30_ok": true
+        },
+        "status": "accept",
+        "messages": [
+          "Pipeline stages follow the canonical validate→dry_run→gate→apply→export→rb30_verify order.",
+          "All required stages are present.",
+          "There are no unknown stages in the pipeline.",
+          "RB-30 verification stage (rb30_verify) is present at the end of the pipeline."
+        ]
+      }
+    },
+    "CH07": {
+      "result": {
+        "chapter": "CH07",
+        "summary": {
+          "change_count": 1,
+          "boundary_targets": [
+            "production"
+          ]
+        },
+        "checks": {
+          "schema_ok": true,
+          "chapter_ok": true,
+          "rb30_ok": true,
+          "boundary_ok": true,
+          "metrics_ok": true
+        },
+        "status": "accept",
+        "messages": [
+          "Basic change pack schema looks valid.",
+          "Change pack targets chapter CH07 and matches the lab snapshot.",
+          "RB-30 anchor is present and well-formed.",
+          "All change targets are within the allowed_targets defined in the snapshot.",
+          "Candidate AUC 0.940 is above the minimum threshold 0.900.",
+          "Candidate AUC 0.940 is not worse than current AUC 0.910 by more than the allowed delta (0.000)."
+        ]
+      }
+    }
   },
-  "candidate_model": {
-    "id": "ch07_model_v2",
-    "auc": 0.94
-  },
-  "thresholds": {
-    "min_candidate_auc": 0.9,
-    "min_improvement": 0.0
+  "meta": {
+    "generated_by": "labs/ch07/snapshot_labs.sh",
+    "generated_ts_utc": "2025-11-16T09:59:24Z",
+    "profile": "HDBM-LABS-Global",
+    "scope": "labs"
   },
   "boundary": {
     "allowed_targets": [
-      "staging",
       "production"
-    ],
-    "allowed_paths": [
-      "labs/ch07/models/**"
     ]
+  },
+  "metrics": {
+    "current_model": {
+      "id": "ch07_model_v1",
+      "auc": 0.92
+    },
+    "candidate_model": {
+      "id": "ch07_model_v2",
+      "auc": 0.94
+    },
+    "min_auc": 0.90,
+    "max_delta_auc": 0.05
   }
 }

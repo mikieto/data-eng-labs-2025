@@ -1,5 +1,7 @@
 {
   "chapter": "CH07",
+  "status": "accept",
+  "change_id": null,
   "summary": {
     "change_count": 1,
     "boundary_targets": [
@@ -13,13 +15,15 @@
     "boundary_ok": true,
     "metrics_ok": true
   },
-  "status": "accept",
+  "metrics": {
+    "current_auc": 0.92,
+    "candidate_auc": 0.94,
+    "min_auc": 0.9,
+    "max_delta_auc": 0.05,
+    "delta_auc": 0.019999999999999907
+  },
   "messages": [
-    "Basic change pack schema looks valid.",
-    "Change pack targets chapter CH07 and matches the lab snapshot.",
-    "RB-30 anchor is present and well-formed.",
-    "All change targets are within the allowed_targets defined in the snapshot.",
-    "Candidate AUC 0.940 is above the minimum threshold 0.900.",
-    "Candidate AUC 0.940 is not worse than current AUC 0.910 by more than the allowed delta (0.000)."
+    "[boundary] targets in pack: ['production'], allowed_targets: ['production']",
+    "[metrics] Candidate model satisfies min_auc and max_delta_auc constraints."
   ]
 }

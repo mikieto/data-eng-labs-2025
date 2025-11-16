@@ -1,272 +1,276 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
-CH07 lab runner — AI-generated Change Pack Evaluator (Day-0 / Phase-1).
+CH07 Lab Day-0 / Phase-1 runner
 
-This runner reads:
-  - a tiny lab-scale state snapshot (state_snapshot.json)
-  - a sample AI-generated change pack (ai_generated_change_pack_example.json)
+- Reads Labs Global Snapshot (labs/ch07/inputs/state_snapshot.json)
+- Reads AI-generated change pack (labs/ch07/inputs/ai_generated_change_pack_example.json)
+- Evaluates the pack against schema, chapter, RB-30, boundary, and metrics
+- Writes labs/ch07/artifacts/result.json
 
-and evaluates whether the change pack is *safe enough* to accept,
-based on a minimal set of checks:
-
-  - schema_ok: basic required keys and types are present
-  - chapter_ok: the pack targets the correct chapter / world
-  - rb30_ok: an RB-30 anchor is present and well-formed
-  - boundary_ok: the proposed changes stay within allowed targets
-  - metrics_ok: the candidate model quality meets thresholds from the snapshot
-
-The result is written to:
-  labs/ch07/artifacts/result.json
-
-This is a closed lab. The runner does NOT call any external LLM APIs.
-It only evaluates the JSON files inside labs/ch07/.
+This runner never:
+- calls external LLMs
+- modifies files outside labs/ch07/**
+- executes code contained in the change pack
 """
+
+from __future__ import annotations
 
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 
-HERE = Path(__file__).resolve().parent
-INPUTS_DIR = HERE / "inputs"
-ARTIFACTS_DIR = HERE / "artifacts"
+CH07_DIR = Path(__file__).resolve().parent
+INPUTS_DIR = CH07_DIR / "inputs"
+ARTIFACTS_DIR = CH07_DIR / "artifacts"
 
-ALLOWED_RB30_TYPES = {"tag", "swap", "tt"}
-
-
-def load_json(path: Path) -> Any:
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
+SNAPSHOT_PATH = INPUTS_DIR / "state_snapshot.json"
+CHANGE_PACK_PATH = INPUTS_DIR / "ai_generated_change_pack_example.json"
+RESULT_PATH = ARTIFACTS_DIR / "result.json"
 
 
-def ensure_artifacts_dir() -> None:
-    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+def load_json(path: Path, errors: List[str]) -> Dict[str, Any]:
+    if not path.exists():
+        errors.append(f"File not found: {path}")
+        return {}
+
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:  # noqa: BLE001
+        errors.append(f"Failed to parse JSON at {path}: {e}")
+        return {}
 
 
-def evaluate_change_pack(
-    snapshot: Dict[str, Any],
-    pack: Dict[str, Any],
-) -> Dict[str, Any]:
-    """Evaluate a tiny AI-generated change pack against a lab-scale snapshot."""
-    # Basic schema checks
-    schema_ok, schema_messages = check_schema(pack)
-    chapter_ok = (
-        isinstance(pack.get("chapter"), str)
-        and pack.get("chapter") == snapshot.get("chapter") == "CH07"
-    )
-    rb30_ok = check_rb30(pack.get("rb30_anchor"))
-    boundary_ok, boundary_targets, boundary_messages = check_boundary(
-        snapshot, pack
-    )
-    metrics_ok, metrics_messages = check_metrics(snapshot)
+def check_schema(change_pack: Dict[str, Any], messages: List[str]) -> bool:
+    required_top_level = ["kind", "chapter", "mode", "rb30_anchor", "summary", "changes"]
+    ok = True
 
-    status = (
-        "accept"
-        if (schema_ok and chapter_ok and rb30_ok and boundary_ok and metrics_ok)
-        else "reject"
-    )
+    for key in required_top_level:
+        if key not in change_pack:
+            messages.append(f"[schema] Missing required key: {key}")
+            ok = False
 
-    messages: List[str] = []
-    messages.extend(schema_messages)
-    messages.append(
-        "Change pack targets chapter CH07 and matches the lab snapshot."
-        if chapter_ok
-        else "Change pack chapter does not match the lab snapshot (expected CH07)."
-    )
-    messages.append(
-        "RB-30 anchor is present and well-formed."
-        if rb30_ok
-        else "RB-30 anchor is missing or invalid."
-    )
-    messages.extend(boundary_messages)
-    messages.extend(metrics_messages)
-
-    change_list = pack.get("changes") or []
-    change_count = len(change_list)
-
-    return {
-        "chapter": "CH07",
-        "summary": {
-            "change_count": change_count,
-            "boundary_targets": sorted(boundary_targets),
-        },
-        "checks": {
-            "schema_ok": bool(schema_ok),
-            "chapter_ok": bool(chapter_ok),
-            "rb30_ok": bool(rb30_ok),
-            "boundary_ok": bool(boundary_ok),
-            "metrics_ok": bool(metrics_ok),
-        },
-        "status": status,
-        "messages": messages,
-    }
-
-
-def check_schema(pack: Dict[str, Any]) -> Tuple[bool, List[str]]:
-    messages: List[str] = []
-    required_top_keys = [
-        "kind",
-        "chapter",
-        "mode",
-        "rb30_anchor",
-        "summary",
-        "changes",
-    ]
-    missing_keys = [k for k in required_top_keys if k not in pack]
-    kind_ok = pack.get("kind") == "ai_generated_change_pack"
-    mode_ok = pack.get("mode") in {"text", "labs"}
-
-    if missing_keys:
+    if change_pack.get("kind") != "ai_generated_change_pack":
         messages.append(
-            "Change pack is missing required keys: " + ", ".join(missing_keys)
+            f"[schema] kind must be 'ai_generated_change_pack', got: {change_pack.get('kind')!r}"
         )
-    if not kind_ok:
+        ok = False
+
+    if not isinstance(change_pack.get("changes"), list):
+        messages.append("[schema] 'changes' must be a list.")
+        ok = False
+
+    return ok
+
+
+def check_chapter(change_pack: Dict[str, Any], snapshot: Dict[str, Any], messages: List[str]) -> bool:
+    ok = True
+
+    chapter = change_pack.get("chapter")
+    mode = change_pack.get("mode")
+
+    if chapter != "CH07":
+        messages.append(f"[chapter] chapter must be 'CH07', got: {chapter!r}")
+        ok = False
+
+    if mode != "labs":
+        messages.append(f"[chapter] mode must be 'labs', got: {mode!r}")
+        ok = False
+
+    # Optional: if snapshot has a chapters.CH07 entry, we can check consistency
+    chapters = snapshot.get("chapters", {})
+    if chapters and "CH07" not in chapters:
+        messages.append("[chapter] snapshot.chapters is present but does not contain CH07.")
+        # not fatal, but worth flagging
+    return ok
+
+
+def check_rb30(change_pack: Dict[str, Any], messages: List[str]) -> bool:
+    ok = True
+    anchor = change_pack.get("rb30_anchor")
+
+    if not isinstance(anchor, dict):
+        messages.append("[rb30] rb30_anchor must be an object.")
+        return False
+
+    anchor_type = anchor.get("type")
+    anchor_ref = anchor.get("ref")
+
+    allowed_types = {"tag", "swap", "tt"}
+    if anchor_type not in allowed_types:
         messages.append(
-            "Change pack 'kind' must be 'ai_generated_change_pack'."
+            f"[rb30] rb30_anchor.type must be one of {sorted(allowed_types)}, got: {anchor_type!r}"
         )
-    if not mode_ok:
-        messages.append(
-            "Change pack 'mode' should be either 'text' or 'labs' (labs for this lab)."
-        )
+        ok = False
 
-    changes = pack.get("changes")
-    if not isinstance(changes, list) or not changes:
-        messages.append("Change pack must contain at least one change.")
+    if not anchor_ref or not isinstance(anchor_ref, str):
+        messages.append("[rb30] rb30_anchor.ref must be a non-empty string.")
+        ok = False
 
-    schema_ok = (
-        not missing_keys
-        and kind_ok
-        and mode_ok
-        and isinstance(changes, list)
-        and bool(changes)
-    )
-
-    if schema_ok:
-        messages.insert(0, "Basic change pack schema looks valid.")
-
-    return schema_ok, messages
-
-
-def check_rb30(rb30_anchor: Any) -> bool:
-    if not isinstance(rb30_anchor, dict):
-        return False
-    rb_type = rb30_anchor.get("type")
-    ref = rb30_anchor.get("ref")
-    if rb_type not in ALLOWED_RB30_TYPES:
-        return False
-    if not isinstance(ref, str) or not ref.strip():
-        return False
-    return True
+    return ok
 
 
 def check_boundary(
+    change_pack: Dict[str, Any],
     snapshot: Dict[str, Any],
-    pack: Dict[str, Any],
-) -> Tuple[bool, List[str], List[str]]:
-    messages: List[str] = []
+    messages: List[str],
+) -> bool:
+    ok = True
+
     boundary = snapshot.get("boundary") or {}
-    allowed_targets = set(boundary.get("allowed_targets") or [])
-    # Day-0: we do not expand allowed_paths; we simply check targets.
+    allowed_targets = boundary.get("allowed_targets")
 
-    changes = pack.get("changes") or []
-    targets_seen: List[str] = []
-    invalid_targets: List[str] = []
+    if not isinstance(allowed_targets, list) or not allowed_targets:
+        messages.append("[boundary] snapshot.boundary.allowed_targets must be a non-empty list.")
+        return False
 
-    for change in changes:
-        if not isinstance(change, dict):
-            invalid_targets.append("<non-dict-change>")
-            continue
+    allowed_set = set(str(t) for t in allowed_targets)
+    targets_in_pack = set()
+
+    for change in change_pack.get("changes", []):
         target = change.get("target")
         if target is None:
-            invalid_targets.append("<missing-target>")
+            messages.append("[boundary] change missing 'target' field.")
+            ok = False
             continue
-        targets_seen.append(str(target))
-        if target not in allowed_targets:
-            invalid_targets.append(str(target))
+        targets_in_pack.add(str(target))
+        if str(target) not in allowed_set:
+            messages.append(
+                f"[boundary] target {target!r} is not in allowed_targets={sorted(allowed_set)}."
+            )
+            ok = False
 
-    if not allowed_targets:
+    if targets_in_pack:
         messages.append(
-            "Snapshot boundary.allowed_targets is empty; cannot evaluate targets."
+            f"[boundary] targets in pack: {sorted(targets_in_pack)}, "
+            f"allowed_targets: {sorted(allowed_set)}"
         )
-        boundary_ok = False
-    elif invalid_targets:
+
+    return ok
+
+
+def _extract_metrics(snapshot: Dict[str, Any]) -> Tuple[float | None, float | None, float | None, float | None]:
+    """Return (current_auc, candidate_auc, min_auc, max_delta)."""
+    metrics = snapshot.get("metrics") or {}
+    current = (metrics.get("current_model") or {}).get("auc")
+    candidate = (metrics.get("candidate_model") or {}).get("auc")
+    min_auc = metrics.get("min_auc")
+    max_delta = metrics.get("max_delta_auc")
+    return current, candidate, min_auc, max_delta
+
+
+def check_metrics(snapshot: Dict[str, Any], messages: List[str]) -> Tuple[bool, Dict[str, float]]:
+    current_auc, candidate_auc, min_auc, max_delta = _extract_metrics(snapshot)
+
+    info: Dict[str, float] = {}
+
+    # If any critical field is missing, fail closed.
+    if current_auc is None or candidate_auc is None or min_auc is None or max_delta is None:
         messages.append(
-            "Some changes target environments outside the allowed_targets: "
-            + ", ".join(sorted(set(invalid_targets)))
+            "[metrics] Missing one of current_auc, candidate_auc, min_auc, max_delta_auc "
+            "in snapshot.metrics; rejecting for safety."
         )
-        boundary_ok = False
-    else:
+        return False, info
+
+    info = {
+        "current_auc": float(current_auc),
+        "candidate_auc": float(candidate_auc),
+        "min_auc": float(min_auc),
+        "max_delta_auc": float(max_delta),
+    }
+
+    ok = True
+
+    if info["candidate_auc"] < info["min_auc"]:
         messages.append(
-            "All change targets are within the allowed_targets defined in the snapshot."
+            f"[metrics] candidate_auc={info['candidate_auc']:.3f} < "
+            f"min_auc={info['min_auc']:.3f}."
         )
-        boundary_ok = True
+        ok = False
 
-    return boundary_ok, targets_seen, messages
+    delta = info["candidate_auc"] - info["current_auc"]
+    info["delta_auc"] = delta
+
+    if delta < -info["max_delta_auc"]:
+        messages.append(
+            f"[metrics] candidate is worse than current by {delta:.3f}, "
+            f"allowed degradation is {info['max_delta_auc']:.3f}."
+        )
+        ok = False
+
+    if ok:
+        messages.append(
+            "[metrics] Candidate model satisfies min_auc and max_delta_auc constraints."
+        )
+
+    return ok, info
 
 
-def check_metrics(snapshot: Dict[str, Any]) -> Tuple[bool, List[str]]:
+def main() -> int:
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+
     messages: List[str] = []
+    load_errors: List[str] = []
 
-    current = snapshot.get("current_model") or {}
-    candidate = snapshot.get("candidate_model") or {}
-    thresholds = snapshot.get("thresholds") or {}
+    snapshot = load_json(SNAPSHOT_PATH, load_errors)
+    change_pack = load_json(CHANGE_PACK_PATH, load_errors)
 
-    try:
-        current_auc = float(current.get("auc"))
-        candidate_auc = float(candidate.get("auc"))
-    except (TypeError, ValueError):
-        messages.append(
-            "Could not read numeric AUC values for current or candidate model."
-        )
-        return False, messages
+    for err in load_errors:
+        messages.append(f"[io] {err}")
 
-    min_candidate_auc = float(thresholds.get("min_candidate_auc", 0.0))
-    min_improvement = float(thresholds.get("min_improvement", 0.0))
-
-    abs_ok = candidate_auc >= min_candidate_auc
-    rel_ok = (candidate_auc - current_auc) >= min_improvement
-
-    if abs_ok:
-        messages.append(
-            f"Candidate AUC {candidate_auc:.3f} is above the minimum threshold {min_candidate_auc:.3f}."
-        )
+    # Default checks to False if I/O failed
+    if load_errors:
+        checks = {
+            "schema_ok": False,
+            "chapter_ok": False,
+            "rb30_ok": False,
+            "boundary_ok": False,
+            "metrics_ok": False,
+        }
+        metrics_info: Dict[str, float] = {}
+        status = "reject"
     else:
-        messages.append(
-            f"Candidate AUC {candidate_auc:.3f} is below the minimum threshold {min_candidate_auc:.3f}."
-        )
+        schema_ok = check_schema(change_pack, messages)
+        chapter_ok = check_chapter(change_pack, snapshot, messages)
+        rb30_ok = check_rb30(change_pack, messages)
+        boundary_ok = check_boundary(change_pack, snapshot, messages)
+        metrics_ok, metrics_info = check_metrics(snapshot, messages)
 
-    if rel_ok:
-        messages.append(
-            f"Candidate AUC {candidate_auc:.3f} is not worse than current AUC {current_auc:.3f} "
-            f"by more than the allowed delta ({min_improvement:.3f})."
-        )
-    else:
-        messages.append(
-            f"Candidate AUC {candidate_auc:.3f} is too low compared to current AUC {current_auc:.3f} "
-            f"given the allowed delta ({min_improvement:.3f})."
-        )
+        checks = {
+            "schema_ok": schema_ok,
+            "chapter_ok": chapter_ok,
+            "rb30_ok": rb30_ok,
+            "boundary_ok": boundary_ok,
+            "metrics_ok": metrics_ok,
+        }
 
-    metrics_ok = abs_ok and rel_ok
-    return metrics_ok, messages
+        status = "accept" if all(checks.values()) else "reject"
 
+    # Simple summary
+    changes = change_pack.get("changes") if isinstance(change_pack, dict) else []
+    change_count = len(changes) if isinstance(changes, list) else 0
+    boundary_targets = sorted({c.get("target") for c in changes if isinstance(c, dict) and "target" in c})
 
-def main() -> None:
-    snapshot_path = INPUTS_DIR / "state_snapshot.json"
-    pack_path = INPUTS_DIR / "ai_generated_change_pack_example.json"
+    result = {
+        "chapter": "CH07",
+        "status": status,
+        "change_id": None,  # can be wired to STR IDs later
+        "summary": {
+            "change_count": change_count,
+            "boundary_targets": boundary_targets,
+        },
+        "checks": checks,
+        "metrics": metrics_info,
+        "messages": messages,
+    }
 
-    snapshot = load_json(snapshot_path)
-    pack = load_json(pack_path)
-
-    result = evaluate_change_pack(snapshot, pack)
-
-    ensure_artifacts_dir()
-    artifacts_path = ARTIFACTS_DIR / "result.json"
-    with artifacts_path.open("w", encoding="utf-8") as f:
+    with RESULT_PATH.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    # Human-friendly one-line summary
-    print(f"[CH07] Lab completed. status={result['status']} → {artifacts_path}")
+    print(f"[CH07] Wrote evaluation result to {RESULT_PATH} (status={status}).")
+    return 0 if status == "accept" else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
