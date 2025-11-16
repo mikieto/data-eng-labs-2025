@@ -1,0 +1,22 @@
+{
+  "pipeline_id": "ch03_demo_pipeline",
+  "description": "Demo integration from CRM and billing into a tiny analytics table.",
+  "sources": [
+    {
+      "id": "crm",
+      "name": "CRM system",
+      "expected_monthly_revenue_impact_usd": 50000,
+      "integration_effort_days": 10
+    },
+    {
+      "id": "billing",
+      "name": "Billing system",
+      "expected_monthly_revenue_impact_usd": 30000,
+      "integration_effort_days": 5
+    }
+  ],
+  "slis": {
+    "freshness_hours": 3.0,
+    "coverage_pct": 0.98
+  }
+}

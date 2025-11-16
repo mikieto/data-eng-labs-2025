@@ -1,0 +1,23 @@
+{
+  "chapter": "CH03",
+  "status": "accept",
+  "change_id": "baseline",
+  "messages": [
+    "Evaluated integration pipeline 'ch03_demo_pipeline' for scenario 'baseline'.",
+    "All key SLI/SLO thresholds and ROI targets are satisfied for this scenario."
+  ],
+  "checks": {
+    "sli_slo_ok": true,
+    "roi_ok": true,
+    "overall_ok": true
+  },
+  "metrics": {
+    "total_expected_monthly_impact_usd": 80000.0,
+    "total_integration_effort_days": 15.0,
+    "total_integration_cost_usd": 120000.0,
+    "freshness_hours": 3.0,
+    "coverage_pct": 0.98,
+    "roi_after_12_months": 7.0,
+    "payback_period_months": 1.5
+  }
+}

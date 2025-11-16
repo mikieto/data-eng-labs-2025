@@ -1,0 +1,11 @@
+{
+  "scenario_id": "baseline",
+  "hours_per_day": 8,
+  "cost_per_engineer_day_usd": 8000,
+  "roi_target_after_12_months": 3.0,
+  "payback_period_target_months": 12.0,
+  "slo_thresholds": {
+    "freshness_hours_max": 6.0,
+    "coverage_pct_min": 0.95
+  }
+}
