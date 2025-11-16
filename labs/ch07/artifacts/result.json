@@ -1,8 +1,13 @@
 {
   "chapter": "CH07",
   "status": "accept",
-  "change_id": null,
-  "summary": {
+  "change_id": "baseline",
+  "metrics": {
+    "current_auc": 0.92,
+    "candidate_auc": 0.94,
+    "min_auc": 0.9,
+    "max_delta_auc": 0.05,
+    "delta_auc": 0.019999999999999907,
     "change_count": 1,
     "boundary_targets": [
       "production"
@@ -14,13 +19,6 @@
     "rb30_ok": true,
     "boundary_ok": true,
     "metrics_ok": true
-  },
-  "metrics": {
-    "current_auc": 0.92,
-    "candidate_auc": 0.94,
-    "min_auc": 0.9,
-    "max_delta_auc": 0.05,
-    "delta_auc": 0.019999999999999907
   },
   "messages": [
     "[boundary] targets in pack: ['production'], allowed_targets: ['production']",

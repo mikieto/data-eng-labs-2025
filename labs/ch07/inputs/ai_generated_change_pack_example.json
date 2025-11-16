@@ -6,7 +6,7 @@
     "type": "tag",
     "ref": "pre-ch07-lab-001"
   },
-  "summary": {
+  "metrics": {
     "reason": "Promote candidate model ch07_model_v2 to production.",
     "confidence": 0.82
   },

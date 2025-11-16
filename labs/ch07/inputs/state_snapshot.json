@@ -4,7 +4,7 @@
       "result": {
         "chapter": "CH02",
         "change_id": "ch02-example-001",
-        "summary": {
+        "metrics": {
           "files_count": 1,
           "total_lines_added": 12,
           "within_limits": true
@@ -22,34 +22,124 @@
         ]
       }
     },
+    "CH03": {
+      "result": {
+        "chapter": "CH03",
+        "status": "accept",
+        "change_id": "baseline",
+        "messages": [
+          "Evaluated integration pipeline 'ch03_demo_pipeline' for scenario 'baseline'.",
+          "All key SLI/SLO thresholds and ROI targets are satisfied for this scenario."
+        ],
+        "checks": {
+          "sli_slo_ok": true,
+          "roi_ok": true,
+          "overall_ok": true
+        },
+        "metrics": {
+          "total_expected_monthly_impact_usd": 80000.0,
+          "total_integration_effort_days": 15.0,
+          "total_integration_cost_usd": 120000.0,
+          "freshness_hours": 3.0,
+          "coverage_pct": 0.98,
+          "roi_after_12_months": 7.0,
+          "payback_period_months": 1.5
+        }
+      }
+    },
+    "CH04": {
+      "result": {
+        "chapter": "CH04",
+        "status": "accept",
+        "change_id": "baseline",
+        "messages": [
+          "Checked tiny Medallion layout for customers across raw/bronze/silver/gold.",
+          "All layers share the same customer_id set and row counts; columns evolve as expected."
+        ],
+        "checks": {
+          "row_counts_consistent": true,
+          "keys_consistent": true,
+          "column_evolution_present": true
+        },
+        "metrics": {
+          "row_counts": {
+            "raw": 3,
+            "bronze": 3,
+            "silver": 3,
+            "gold": 3
+          },
+          "num_columns": {
+            "raw": 2,
+            "bronze": 3,
+            "silver": 4,
+            "gold": 2
+          }
+        }
+      }
+    },
     "CH05": {
       "result": {
         "chapter": "CH05",
-        "pipeline_name": "ch05_mini_highway",
-        "summary": {
-          "stage_count": 6,
-          "unknown_stages": [],
-          "missing_stages": [],
-          "extra_stages": []
-        },
-        "checks": {
-          "order_ok": true,
-          "required_stages_ok": true,
-          "rb30_ok": true
-        },
         "status": "accept",
+        "change_id": "baseline",
         "messages": [
           "Pipeline stages follow the canonical validate→dry_run→gate→apply→export→rb30_verify order.",
           "All required stages are present.",
           "There are no unknown stages in the pipeline.",
           "RB-30 verification stage (rb30_verify) is present at the end of the pipeline."
-        ]
+        ],
+        "checks": {
+          "order_ok": true,
+          "required_stages_ok": true,
+          "rb30_ok": true,
+          "overall_ok": true
+        },
+        "metrics": {
+          "pipeline_name": "ch05_mini_highway",
+          "stage_count": 6,
+          "num_unknown_stages": 0,
+          "num_missing_stages": 0,
+          "num_extra_stages": 0
+        }
+      }
+    },
+    "CH06": {
+      "result": {
+        "chapter": "CH06",
+        "status": "accept",
+        "change_id": "baseline",
+        "messages": [
+          "Checked Data Vault governance for policy hub/satellite against transactions.",
+          "All transaction policies are present in the hub, and all hubs have matching satellites."
+        ],
+        "checks": {
+          "all_transactions_have_hub": true,
+          "no_orphan_satellite": true,
+          "all_hubs_have_satellite": true
+        },
+        "metrics": {
+          "counts": {
+            "transactions": 3,
+            "hub_policies": 3,
+            "sat_policies": 3
+          },
+          "missing_in_hub": [],
+          "orphan_sat": [],
+          "missing_sat": []
+        }
       }
     },
     "CH07": {
       "result": {
         "chapter": "CH07",
-        "summary": {
+        "status": "accept",
+        "change_id": "baseline",
+        "metrics": {
+          "current_auc": 0.92,
+          "candidate_auc": 0.94,
+          "min_auc": 0.9,
+          "max_delta_auc": 0.05,
+          "delta_auc": 0.019999999999999907,
           "change_count": 1,
           "boundary_targets": [
             "production"
@@ -62,21 +152,95 @@
           "boundary_ok": true,
           "metrics_ok": true
         },
-        "status": "accept",
         "messages": [
-          "Basic change pack schema looks valid.",
-          "Change pack targets chapter CH07 and matches the lab snapshot.",
-          "RB-30 anchor is present and well-formed.",
-          "All change targets are within the allowed_targets defined in the snapshot.",
-          "Candidate AUC 0.940 is above the minimum threshold 0.900.",
-          "Candidate AUC 0.940 is not worse than current AUC 0.910 by more than the allowed delta (0.000)."
+          "[boundary] targets in pack: ['production'], allowed_targets: ['production']",
+          "[metrics] Candidate model satisfies min_auc and max_delta_auc constraints."
         ]
+      }
+    },
+    "CH08": {
+      "result": {
+        "chapter": "CH08",
+        "status": "accept",
+        "change_id": "ci_cd_demo",
+        "messages": [
+          "Checked guard coverage and owner teams for a tiny CI/CD pipeline.",
+          "Every stage has at least one guard and an owner team."
+        ],
+        "checks": {
+          "has_stages": true,
+          "all_stages_have_guard": true,
+          "all_stages_have_owner": true
+        },
+        "metrics": {
+          "stage_count": 3,
+          "guards_per_stage": [
+            1,
+            1,
+            2
+          ],
+          "owner_teams": [
+            "platform",
+            "platform",
+            "sre"
+          ],
+          "missing_guards": [],
+          "missing_owners": []
+        }
+      }
+    },
+    "CH09": {
+      "result": {
+        "chapter": "CH09",
+        "status": "accept",
+        "change_id": "baseline",
+        "messages": [
+          "Checked a tiny cloud migration plan for on-prem / cloud coexistence.",
+          "All planned tables exist in both worlds with matching row counts."
+        ],
+        "checks": {
+          "all_plan_tables_exist_onprem": true,
+          "all_dual_or_cutover_tables_exist_in_cloud": true,
+          "no_rowcount_mismatch_for_migrated_tables": true
+        },
+        "metrics": {
+          "missing_onprem": [],
+          "missing_cloud": [],
+          "row_mismatch": {}
+        }
+      }
+    },
+    "CH10": {
+      "result": {
+        "chapter": "CH10",
+        "status": "accept",
+        "change_id": "baseline",
+        "messages": [
+          "Checked a tiny scaling plan: workloads mapped to warehouses with max concurrency limits.",
+          "No warehouse is overcommitted given current workload concurrency."
+        ],
+        "checks": {
+          "warehouses_defined": true,
+          "workloads_defined": true,
+          "no_overcommitted_warehouses": true
+        },
+        "metrics": {
+          "warehouse_capacity": {
+            "wh_small": 8,
+            "wh_medium": 16
+          },
+          "warehouse_used_concurrency": {
+            "wh_small": 5,
+            "wh_medium": 12
+          },
+          "overcommitted": {}
+        }
       }
     }
   },
   "meta": {
     "generated_by": "labs/ch07/snapshot_labs.sh",
-    "generated_ts_utc": "2025-11-16T09:59:24Z",
+    "generated_ts_utc": "2025-11-16T15:39:46Z",
     "profile": "HDBM-LABS-Global",
     "scope": "labs"
   },

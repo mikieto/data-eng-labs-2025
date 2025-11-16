@@ -51,7 +51,7 @@ You should see that:
 
 Open the result file and read:
 
-- `summary.files_count` and `summary.total_lines_added`
+- `metrics.files_count` and `metrics.total_lines_added`
 - `checks.boundary_ok`, `checks.unit_ok`, and `checks.rb30_ok`
 - `messages[]`
 

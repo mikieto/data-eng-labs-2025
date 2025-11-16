@@ -80,7 +80,7 @@ def evaluate_change_request(
     return {
         "chapter": change_request.get("chapter", "CH02"),
         "change_id": change_request.get("change_id"),
-        "summary": {
+        "metrics": {
             "files_count": files_count,
             "total_lines_added": total_lines_added,
             "within_limits": bool(unit_ok),

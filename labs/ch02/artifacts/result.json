@@ -1,7 +1,7 @@
 {
   "chapter": "CH02",
   "change_id": "ch02-example-001",
-  "summary": {
+  "metrics": {
     "files_count": 1,
     "total_lines_added": 12,
     "within_limits": true

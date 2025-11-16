@@ -101,7 +101,7 @@ the script will:
 
    * **`schema_ok`**
      Required top-level keys are present and basic types are correct
-     (`kind`, `chapter`, `mode`, `rb30_anchor`, `summary`, `changes`).
+     (`kind`, `chapter`, `mode`, `rb30_anchor`, `metrics`, `changes`).
 
    * **`chapter_ok`**
      The pack targets chapter `"CH07"` and `"mode": "labs"`.
@@ -124,7 +124,7 @@ the script will:
 
 5. Write a report to `labs/ch07/artifacts/result.json` with:
 
-   * `summary.change_count` and `summary.boundary_targets`
+   * `metrics.change_count` and `metrics.boundary_targets`
    * `checks.schema_ok`, `checks.chapter_ok`, `checks.rb30_ok`,
      `checks.boundary_ok`, `checks.metrics_ok`
    * `metrics.current_auc`, `metrics.candidate_auc`, `metrics.delta_auc`
@@ -151,7 +151,7 @@ You should see that:
 
 Open the result file and read:
 
-* `summary.change_count`, `summary.boundary_targets`
+* `metrics.change_count`, `metrics.boundary_targets`
 * the five `checks.*` flags
 * `metrics.*`
 * `messages[]`

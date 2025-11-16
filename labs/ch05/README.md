@@ -101,7 +101,7 @@ the script will:
 
 5. Write a report to `labs/ch05/artifacts/result.json` with:
 
-   - `summary.stage_count`, `summary.unknown_stages`, `summary.missing_stages`
+   - `metrics.stage_count`, `metrics.unknown_stages`, `metrics.missing_stages`
    - `checks.order_ok`, `checks.required_stages_ok`, `checks.rb30_ok`
    - `status` (`"accept"` or `"reject"`)
    - human-readable `messages[]`
@@ -126,7 +126,7 @@ You should see that:
 
 Open the result file and read:
 
-- `summary.stage_count`, `summary.unknown_stages`, `summary.missing_stages`
+- `metrics.stage_count`, `metrics.unknown_stages`, `metrics.missing_stages`
 - `checks.order_ok`, `checks.required_stages_ok`, and `checks.rb30_ok`
 - `messages[]`
 
@@ -184,7 +184,7 @@ Try one experiment at a time:
 
    - Remove `dry_run` or `export` from the list of stages.
    - Run the lab again and see how `checks.required_stages_ok` and
-     `summary.missing_stages` change.
+     `metrics.missing_stages` change.
 
 3. **Break RB-30**
 
@@ -207,7 +207,7 @@ Try one experiment at a time:
        - rb30_verify
      ```
 
-   - Run the lab and see how `summary.unknown_stages` and `status` change.
+   - Run the lab and see how `metrics.unknown_stages` and `status` change.
 
 Each time, compare the new `result.json` with the previous result and
 ask yourself: *“What kind of bug would this represent in a real system?”*

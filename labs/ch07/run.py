@@ -43,7 +43,7 @@ def load_json(path: Path, errors: List[str]) -> Dict[str, Any]:
 
 
 def check_schema(change_pack: Dict[str, Any], messages: List[str]) -> bool:
-    required_top_level = ["kind", "chapter", "mode", "rb30_anchor", "summary", "changes"]
+    required_top_level = ["kind", "chapter", "mode", "rb30_anchor", "metrics", "changes"]
     ok = True
 
     for key in required_top_level:
@@ -250,25 +250,32 @@ def main() -> int:
     # Simple summary
     changes = change_pack.get("changes") if isinstance(change_pack, dict) else []
     change_count = len(changes) if isinstance(changes, list) else 0
-    boundary_targets = sorted({c.get("target") for c in changes if isinstance(c, dict) and "target" in c})
+    boundary_targets = sorted(
+        {c.get("target") for c in changes if isinstance(c, dict) and "target" in c}
+    )
+
+    # metrics_info (AUC 関係) と change_count/boundary_targets を 1つの metrics にまとめる
+    combined_metrics: Dict[str, Any] = {}
+    combined_metrics.update(metrics_info)
+    combined_metrics.update(
+        {
+            "change_count": change_count,
+            "boundary_targets": boundary_targets,
+        }
+    )
 
     result = {
         "chapter": "CH07",
         "status": status,
-        "change_id": None,  # can be wired to STR IDs later
-        "summary": {
-            "change_count": change_count,
-            "boundary_targets": boundary_targets,
-        },
+        "change_id": "baseline",  # can be wired to STR IDs later
+        "metrics": combined_metrics,
         "checks": checks,
-        "metrics": metrics_info,
         "messages": messages,
     }
 
     with RESULT_PATH.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    # 他章と同じフォーマット + Path から算出
     display_path = RESULT_PATH.relative_to(CH07_DIR)
     print(f"[CH07] Lab completed. status={status} → {display_path}")
     return 0 if status == "accept" else 1
