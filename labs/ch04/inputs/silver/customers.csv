@@ -1,0 +1,4 @@
+customer_id,name,email,is_active
+C001,Alice,alice@example.com,true
+C002,Bob,bob@example.com,true
+C003,Charlie,charlie@example.com,false

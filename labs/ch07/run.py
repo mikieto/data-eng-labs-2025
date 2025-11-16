@@ -268,7 +268,9 @@ def main() -> int:
     with RESULT_PATH.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    print(f"[CH07] Wrote evaluation result to {RESULT_PATH} (status={status}).")
+    # 他章と同じフォーマット + Path から算出
+    display_path = RESULT_PATH.relative_to(CH07_DIR)
+    print(f"[CH07] Lab completed. status={status} → {display_path}")
     return 0 if status == "accept" else 1
 
 

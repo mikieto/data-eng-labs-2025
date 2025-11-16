@@ -1,0 +1,9 @@
+{
+  "plan_id": "baseline",
+  "tables": [
+    {
+      "name": "customers",
+      "mode": "dual_write"
+    }
+  ]
+}

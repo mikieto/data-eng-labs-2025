@@ -1,0 +1,25 @@
+{
+  "chapter": "CH10",
+  "status": "accept",
+  "change_id": "baseline",
+  "messages": [
+    "Checked a tiny scaling plan: workloads mapped to warehouses with max concurrency limits.",
+    "No warehouse is overcommitted given current workload concurrency."
+  ],
+  "checks": {
+    "warehouses_defined": true,
+    "workloads_defined": true,
+    "no_overcommitted_warehouses": true
+  },
+  "metrics": {
+    "warehouse_capacity": {
+      "wh_small": 8,
+      "wh_medium": 16
+    },
+    "warehouse_used_concurrency": {
+      "wh_small": 5,
+      "wh_medium": 12
+    },
+    "overcommitted": {}
+  }
+}

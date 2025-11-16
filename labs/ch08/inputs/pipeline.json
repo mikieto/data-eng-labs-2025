@@ -1,0 +1,27 @@
+{
+  "pipeline_id": "ci_cd_demo",
+  "stages": [
+    {
+      "name": "lint",
+      "guards": [
+        "lint"
+      ],
+      "owner_team": "platform"
+    },
+    {
+      "name": "unit_tests",
+      "guards": [
+        "tests"
+      ],
+      "owner_team": "platform"
+    },
+    {
+      "name": "deploy",
+      "guards": [
+        "manual_approval",
+        "canary"
+      ],
+      "owner_team": "sre"
+    }
+  ]
+}

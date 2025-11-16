@@ -130,8 +130,9 @@ def main() -> None:
     with artifacts_path.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    # Human-friendly one-line summary (allowed as “non-noisy” output)
-    print(f"[CH02] Lab completed. status={result['status']} → {artifacts_path}")
+    # Human-friendly one-line summary（パスは Path から算出）
+    display_path = artifacts_path.relative_to(HERE)
+    print(f"[CH02] Lab completed. status={result['status']} → {display_path}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,25 @@
+{
+  "workloads": [
+    {
+      "id": "w01",
+      "name": "daily_reporting",
+      "avg_query_seconds": 30,
+      "concurrency": 5,
+      "assigned_warehouse": "wh_small"
+    },
+    {
+      "id": "w02",
+      "name": "ad_hoc_analysis",
+      "avg_query_seconds": 60,
+      "concurrency": 10,
+      "assigned_warehouse": "wh_medium"
+    },
+    {
+      "id": "w03",
+      "name": "etl_batch",
+      "avg_query_seconds": 120,
+      "concurrency": 2,
+      "assigned_warehouse": "wh_medium"
+    }
+  ]
+}

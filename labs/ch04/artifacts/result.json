@@ -1,0 +1,28 @@
+{
+  "chapter": "CH04",
+  "status": "accept",
+  "change_id": "baseline",
+  "messages": [
+    "Checked tiny Medallion layout for customers across raw/bronze/silver/gold.",
+    "All layers share the same customer_id set and row counts; columns evolve as expected."
+  ],
+  "checks": {
+    "row_counts_consistent": true,
+    "keys_consistent": true,
+    "column_evolution_present": true
+  },
+  "metrics": {
+    "row_counts": {
+      "raw": 3,
+      "bronze": 3,
+      "silver": 3,
+      "gold": 3
+    },
+    "num_columns": {
+      "raw": 2,
+      "bronze": 3,
+      "silver": 4,
+      "gold": 2
+    }
+  }
+}

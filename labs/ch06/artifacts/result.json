@@ -1,0 +1,24 @@
+{
+  "chapter": "CH06",
+  "status": "accept",
+  "change_id": "baseline",
+  "messages": [
+    "Checked Data Vault governance for policy hub/satellite against transactions.",
+    "All transaction policies are present in the hub, and all hubs have matching satellites."
+  ],
+  "checks": {
+    "all_transactions_have_hub": true,
+    "no_orphan_satellite": true,
+    "all_hubs_have_satellite": true
+  },
+  "metrics": {
+    "counts": {
+      "transactions": 3,
+      "hub_policies": 3,
+      "sat_policies": 3
+    },
+    "missing_in_hub": [],
+    "orphan_sat": [],
+    "missing_sat": []
+  }
+}

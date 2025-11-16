@@ -1,0 +1,19 @@
+{
+  "chapter": "CH09",
+  "status": "accept",
+  "change_id": "baseline",
+  "messages": [
+    "Checked a tiny cloud migration plan for on-prem / cloud coexistence.",
+    "All planned tables exist in both worlds with matching row counts."
+  ],
+  "checks": {
+    "all_plan_tables_exist_onprem": true,
+    "all_dual_or_cutover_tables_exist_in_cloud": true,
+    "no_rowcount_mismatch_for_migrated_tables": true
+  },
+  "metrics": {
+    "missing_onprem": [],
+    "missing_cloud": [],
+    "row_mismatch": {}
+  }
+}

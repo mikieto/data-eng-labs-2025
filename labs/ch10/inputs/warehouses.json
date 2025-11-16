@@ -1,0 +1,12 @@
+{
+  "warehouses": [
+    {
+      "id": "wh_small",
+      "max_concurrency": 8
+    },
+    {
+      "id": "wh_medium",
+      "max_concurrency": 16
+    }
+  ]
+}
