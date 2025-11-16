@@ -4,7 +4,7 @@ CH02 lab runner.
 
 Reads a tiny boundary configuration and a simple change request,
 evaluates the request against boundary, unit limits, and RB-30,
-and writes a deterministic JSON result to artifacts/ch02_result.json.
+and writes a deterministic JSON result to artifacts/result.json.
 """
 
 import json
@@ -126,7 +126,7 @@ def main() -> None:
     result = evaluate_change_request(boundary_config, change_request)
 
     ensure_artifacts_dir()
-    artifacts_path = ARTIFACTS_DIR / "ch02_result.json"
+    artifacts_path = ARTIFACTS_DIR / "result.json"
     with artifacts_path.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 

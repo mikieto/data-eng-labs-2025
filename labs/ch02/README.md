@@ -32,7 +32,7 @@ python --version
 - `labs/ch02/run.py` — the lab runner (entry point).
 - `labs/ch02/inputs/boundary_config.json` — fixed boundary and limits.
 - `labs/ch02/inputs/change_request.json` — a small change request you can edit.
-- `labs/ch02/artifacts/ch02_result.json` — result JSON created by the runner.
+- `labs/ch02/artifacts/result.json` — result JSON created by the runner.
 
 ---
 
@@ -46,7 +46,7 @@ python labs/ch02/run.py
 
 You should see that:
 
-- `labs/ch02/artifacts/ch02_result.json` is created or updated.
+- `labs/ch02/artifacts/result.json` is created or updated.
 - The `status` field is `"accept"` for the default change request.
 
 Open the result file and read:
@@ -93,7 +93,7 @@ python labs/ch02/run.py
 - Remove the `rb30_anchor` field or change its `"type"` to an unsupported value.
 - Run the lab again and confirm that `checks.rb30_ok` is now `false`.
 
-Each time, compare the new `ch02_result.json` with the previous result.
+Each time, compare the new `result.json` with the previous result.
 
 ---
 

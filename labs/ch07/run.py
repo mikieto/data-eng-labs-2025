@@ -16,7 +16,7 @@ based on a minimal set of checks:
   - metrics_ok: the candidate model quality meets thresholds from the snapshot
 
 The result is written to:
-  labs/ch07/artifacts/ch07_result.json
+  labs/ch07/artifacts/result.json
 
 This is a closed lab. The runner does NOT call any external LLM APIs.
 It only evaluates the JSON files inside labs/ch07/.
@@ -260,7 +260,7 @@ def main() -> None:
     result = evaluate_change_pack(snapshot, pack)
 
     ensure_artifacts_dir()
-    artifacts_path = ARTIFACTS_DIR / "ch07_result.json"
+    artifacts_path = ARTIFACTS_DIR / "result.json"
     with artifacts_path.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 

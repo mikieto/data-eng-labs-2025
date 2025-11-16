@@ -5,7 +5,7 @@ CH05 lab runner — Mini Single Change Highway.
 Reads a tiny pipeline configuration in YAML (very small subset),
 checks whether the pipeline respects the canonical
 validate → dry_run → gate → apply → export → rb30_verify order,
-and writes a deterministic JSON result to artifacts/ch05_result.json.
+and writes a deterministic JSON result to artifacts/result.json.
 """
 
 import json
@@ -204,7 +204,7 @@ def main() -> None:
     result = evaluate_pipeline(pipeline)
 
     ensure_artifacts_dir()
-    artifacts_path = ARTIFACTS_DIR / "ch05_result.json"
+    artifacts_path = ARTIFACTS_DIR / "result.json"
     with artifacts_path.open("w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 

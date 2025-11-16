@@ -64,7 +64,7 @@ part of the repository.
 
 - `labs/ch05/run.py` — the lab runner (entry point).
 - `labs/ch05/inputs/pipeline.yml` — tiny pipeline configuration.
-- `labs/ch05/artifacts/ch05_result.json` — result JSON created by the runner.
+- `labs/ch05/artifacts/result.json` — result JSON created by the runner.
 
 You do **not** need to install any extra libraries. The runner uses only
 the Python standard library.
@@ -99,7 +99,7 @@ the script will:
    - Do the canonical stages appear in the correct order?
    - Is `rb30_verify` present at the end of the pipeline?
 
-5. Write a report to `labs/ch05/artifacts/ch05_result.json` with:
+5. Write a report to `labs/ch05/artifacts/result.json` with:
 
    - `summary.stage_count`, `summary.unknown_stages`, `summary.missing_stages`
    - `checks.order_ok`, `checks.required_stages_ok`, `checks.rb30_ok`
@@ -121,7 +121,7 @@ python labs/ch05/run.py
 
 You should see that:
 
-- `labs/ch05/artifacts/ch05_result.json` is created or updated.
+- `labs/ch05/artifacts/result.json` is created or updated.
 - The `status` field is `"accept"` for the default pipeline configuration.
 
 Open the result file and read:
@@ -209,7 +209,7 @@ Try one experiment at a time:
 
    - Run the lab and see how `summary.unknown_stages` and `status` change.
 
-Each time, compare the new `ch05_result.json` with the previous result and
+Each time, compare the new `result.json` with the previous result and
 ask yourself: *“What kind of bug would this represent in a real system?”*
 
 ---
