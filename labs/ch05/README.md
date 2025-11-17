@@ -2,6 +2,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch05/run.py` is a **gate** that inspects a pipeline’s stage sequence and required steps in a mini Single Change Highway.
+
 In real data platforms, a change does not go straight from
 "someone edited a file" to "production is updated".
 
@@ -18,7 +20,7 @@ a fixed sequence of stages such as:
 This lab gives you a tiny, fully deterministic playground version of
 that highway. You will:
 
-- Read a small pipeline configuration (`pipeline.yml`) that lists the stages.
+- Read a small pipeline configuration (`pipeline.json`) that lists the stages.
 - Run a Python script that checks if the pipeline is safe and complete.
 - Edit the pipeline and immediately see which safety rails break.
 
@@ -28,6 +30,8 @@ The goal is **intuition**, not performance.
   or Snowflake commands.
 - In this lab, the runner only **evaluates the stage list** and writes a
   JSON report. It never touches any external system.
+
+> **Fusion-Mart perspective.** For Fusion-Mart, this lab represents the Single Change Highway that every important data or analytics change must travel through—from validation to apply and RB-30 verify—before it can affect pricing, recommendations, or dashboards.
 
 ---
 
@@ -144,16 +148,20 @@ labs/ch05/inputs/pipeline.yml
 
 The default content is:
 
-```yaml
-name: ch05_mini_highway
-description: "Tiny Single Change Highway for CH05 lab."
-stages:
-  - validate
-  - dry_run
-  - gate
-  - apply
-  - export
-  - rb30_verify
+```json
+{
+  "pipeline_name": "ch05_mini_highway",
+  "description": "Tiny Single Change Highway for CH05 lab.",
+  "scenario": "baseline",
+  "stages": [
+    "validate",
+    "dry_run",
+    "gate",
+    "apply",
+    "export",
+    "rb30_verify"
+  ]
+}
 ```
 
 Try one experiment at a time:
@@ -162,15 +170,16 @@ Try one experiment at a time:
 
    - Swap two stages, for example:
 
-     ```yaml
-     stages:
-       - validate
-       - gate
-       - dry_run
-       - apply
-       - export
-       - rb30_verify
-     ```
+      ```json
+      "stages": [
+        "validate",
+        "dry_run",
+        "gate",
+        "export",
+        "apply",
+        "rb30_verify"
+      ]
+      ```
 
    - Save the file, then run:
 
@@ -196,16 +205,17 @@ Try one experiment at a time:
 
    - Add a non-canonical stage, for example:
 
-     ```yaml
-     stages:
-       - validate
-       - dry_run
-       - custom_step
-       - gate
-       - apply
-       - export
-       - rb30_verify
-     ```
+      ```json
+        "stages": [
+          "validate",
+          "dry_run",
+          "custom_step",
+          "gate",
+          "apply",
+          "export",
+          "rb30_verify"
+        ]
+      ```
 
    - Run the lab and see how `metrics.unknown_stages` and `status` change.
 
@@ -214,7 +224,7 @@ ask yourself: *“What kind of bug would this represent in a real system?”*
 
 ---
 
-## Step 3 — From this lab to real systems
+## From this lab to real systems
 
 In a real platform, a Single Change Highway might be implemented using:
 

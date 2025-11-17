@@ -2,6 +2,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch09/run.py` is a **gate** that validates a tiny migration plan by checking table presence and row counts on-prem and in the cloud.
+
 In the book, CH09 covers **cloud migration and coexistence**: how to
 move tables from on-prem to cloud while keeping systems safe during
 dual-running or cutover.
@@ -16,6 +18,8 @@ a single table (`customers`) and a tiny migration plan:
 
 A Python runner checks for missing tables and simple row-count
 mismatches, then reports the result as JSON.
+
+> **Fusion-Mart perspective.** For Fusion-Mart, this lab represents a migration gate for moving core tables like `customers` from on-prem to cloud, checking table presence and row counts on both sides before any real cutover is allowed.
 
 ---
 

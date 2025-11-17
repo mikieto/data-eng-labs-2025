@@ -2,6 +2,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch08/run.py` is a **gate** that checks a tiny CI/CD pipeline for guards and owner teams on every stage.
+
 In the book, CH08 focuses on **DevOps & collaboration**: how a small
 CI/CD pipeline encodes guards and ownership, and how that affects
 reliability and accountability.
@@ -17,6 +19,8 @@ practice reading and checking a tiny pipeline definition:
 
 There are no real CI/CD tools in this lab. Everything lives under
 `labs/ch08/` and runs locally.
+
+> **Fusion-Mart perspective.** In the Fusion-Mart case study, this tiny CI/CD pipeline stands in for the deployment path of Fusion-Mart’s data and ML workloads, and this lab is the gate that ensures every stage has guards and clear ownership before real releases can flow through it.
 
 ---
 

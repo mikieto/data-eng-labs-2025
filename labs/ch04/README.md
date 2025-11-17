@@ -3,6 +3,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch04/run.py` is a **gate** that checks a tiny Medallion layout for row-count, key, and column-evolution consistency.
+
 In the book, CH04 introduces a **tiny Medallion architecture**
 (raw → bronze → silver → gold) as a way to reason about data quality,
 schema evolution, and survivability of downstream tables.
@@ -19,6 +21,8 @@ practice those ideas on a single customer table:
 
 There are no external systems in this lab. Everything lives under
 `labs/ch04/` and runs locally.
+
+> **Fusion-Mart perspective.** In the Fusion-Mart story, this tiny Medallion layout stands in for core tables such as customers and orders, and this lab is the gate that checks whether those layers stay consistent enough to trust for downstream analytics.
 
 ---
 

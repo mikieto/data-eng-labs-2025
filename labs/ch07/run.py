@@ -267,7 +267,7 @@ def main() -> int:
     result = {
         "chapter": "CH07",
         "status": status,
-        "change_id": "baseline",  # can be wired to STR IDs later
+        "change_id": "baseline",
         "metrics": combined_metrics,
         "checks": checks,
         "messages": messages,

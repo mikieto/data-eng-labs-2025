@@ -3,6 +3,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch06/run.py` is a **gate** that compares transactions to a tiny Data Vault and flags missing hubs or satellites.
+
 In the book, CH06 uses a **Data Vault-style model** (hub + satellite)
 to reason about data governance: which business keys exist, which
 attributes are tracked, and where gaps can appear.
@@ -17,6 +19,8 @@ are missing or partially modeled in the vault:
 
 A Python runner checks for missing hub keys and satellite orphans,
 then reports the result as JSON.
+
+> **Fusion-Mart perspective.** In the Fusion-Mart case study, this lab plays the governance gate for extended protection plans: it checks that every plan sold at Fusion-Mart has a consistent hub record and satellite attributes, so transactions never refer to “missing” or half-modeled plans.
 
 ---
 

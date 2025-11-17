@@ -2,6 +2,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch10/run.py` is a **gate** that checks whether workloads overcommit tiny warehouses.
+
 In the book, CH10 discusses **scaling and optimization**: how
 workloads map to compute resources and how to spot obvious capacity
 issues.
@@ -17,6 +19,8 @@ warehouse model:
 
 There is no real data warehouse in this lab. Everything lives under
 `labs/ch10/` and runs locally.
+
+> **Fusion-Mart perspective.** In the Fusion-Mart story, this tiny warehouse model mirrors Fusion-Mart’s mix of checkout, analytics, and ML workloads, and this lab is the gate that flags obvious overcommitment before turning on real compute.
 
 ---
 

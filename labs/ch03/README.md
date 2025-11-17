@@ -2,6 +2,8 @@
 
 ## Why this lab exists
 
+In this lab, `labs/ch03/run.py` is a **gate** that scores a tiny integration plan against SLI/SLO and ROI thresholds.
+
 In the book, CH03 discusses how to reason about **data integration
 strategy** using business impact, SLI/SLO, and ROI — instead of talking
 about pipelines only as “technical plumbing”.
@@ -24,6 +26,8 @@ There are no external APIs in this lab. Everything lives under
 In other words, `labs/ch03/run.py` acts as a **lab-level guard** for
 integration strategy: it never runs a real ETL job; it only evaluates
 the plan and outputs an explicit accept/reject decision.
+
+> **Fusion-Mart perspective.** For Fusion-Mart, you can read this as the gate that scores which source systems to integrate next—such as new payment providers or marketing platforms—based on SLI/SLO and ROI, instead of “pipelines for their own sake”.
 
 ---
 
